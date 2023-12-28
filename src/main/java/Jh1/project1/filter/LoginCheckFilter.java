@@ -12,7 +12,8 @@ import java.io.IOException;
 
 @Slf4j
 public class LoginCheckFilter implements Filter {
-    private static final String[] whitelist = {"/", "/members/join", "/login", "/logout", "/css/*"};
+    private static final String[] whitelist = {"/", "/members/join", "/login", "/logout", "/css/*",
+            "/error-ex", "/error-404", "/error-500"};
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {

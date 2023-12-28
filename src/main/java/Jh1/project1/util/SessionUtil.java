@@ -57,4 +57,18 @@ public class SessionUtil {
                 .findAny()
                 .orElse(null);
     }
+
+/*    private Cookie findCookie(HttpServletRequest request, String cookieName) {
+        Cookie[] cookies = request.getCookies();
+
+        if (cookies == null) {
+            return null;
+        }
+        for (Cookie cookie : cookies) {
+            if (cookie.getName().equals(cookieName)) {
+                return cookie;
+            }
+        }
+        return null;
+    }*/
 }

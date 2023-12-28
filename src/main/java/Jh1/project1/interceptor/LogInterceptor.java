@@ -26,7 +26,7 @@ public class LogInterceptor implements HandlerInterceptor {
         if (handler instanceof HandlerMethod) {
             HandlerMethod hm = (HandlerMethod) handler; //호출할 컨트롤러 메서드의 모든정보가 포함되어 있다.
         }
-        log.info("REQUEST  [{}][{}][{}]", uuid, requestURI, handler);
+        log.info("REQUEST  [{}][{}][{}][{}]", uuid, request.getDispatcherType(), requestURI, handler);
         return true; //false 진행X
     }
 
@@ -40,7 +40,7 @@ public class LogInterceptor implements HandlerInterceptor {
 
         String requestURI = request.getRequestURI();
         String uuid = (String) request.getAttribute(LOG_ID);
-        log.info("RESPONSE [{}][{}]", uuid, requestURI);
+        log.info("RESPONSE [{}][{}][{}]", uuid, request.getDispatcherType(), requestURI);
 
         if (ex != null) {
             log.error("afterCompletion error!!", ex);
