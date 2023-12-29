@@ -87,6 +87,14 @@
                     th:onclick="|location.href='@{/items/{itemId}/edit(itemId=${item.id})}'|" type="button"
                     th:text="#{page.updateItem}">수정</button>
         </div>
+
+        <div class="col">
+            <button class="w-100 btn btn-primary btn-lg"
+                    onclick="location.href='uploadForm.html'"
+                    th:onclick="|location.href='@{/items/{itemId}/upload(itemId=${item.id})}'|" type="button"
+                    th:text="#{page.uploadItem}">파일 업로드</button>
+        </div>
+
         <div class="col">
             <button class="w-100 btn btn-secondary btn-lg"
                     onclick="location.href='items.html'"

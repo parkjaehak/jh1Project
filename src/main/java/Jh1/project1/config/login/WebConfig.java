@@ -1,8 +1,8 @@
 package Jh1.project1.config.login;
 
 import Jh1.project1.argumentResolver.LoginMemberArgumentResolver;
-import Jh1.project1.exception.IllegalArgumentHandlerExceptionResolver;
-import Jh1.project1.exception.UserHandlerExceptionResolver;
+import Jh1.project1.handler.IllegalArgumentHandlerExceptionResolver;
+import Jh1.project1.handler.UserHandlerExceptionResolver;
 import Jh1.project1.filter.LogFilter;
 import Jh1.project1.filter.LoginCheckFilter;
 import Jh1.project1.interceptor.LogInterceptor;

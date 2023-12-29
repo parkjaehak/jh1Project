@@ -10,7 +10,7 @@ import org.hibernate.validator.constraints.Range;
 import java.util.List;
 
 @Data
-public class ItemUpdateDto {
+public class UpdateDto {
 
     @NotNull
     private Long id;

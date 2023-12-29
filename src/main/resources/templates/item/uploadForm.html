@@ -1,0 +1,42 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <link href="../css/bootstrap.min.css"
+          th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+    <style>
+        .container {
+            max-width: 560px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="py-5 text-center">
+        <h2>상품 업로드</h2>
+    </div>
+
+    <form th:action method="post" enctype="multipart/form-data">
+        <ul>
+            <li>상표 <input type="text" name="itemBrand"></li>
+            <li>첨부파일<input type="file" name="attachFile" ></li>
+            <li>이미지 파일들<input type="file" multiple="multiple" name="imageFiles" ></li>
+        </ul>
+
+
+        <div class="row">
+            <div class="col">
+                <button class="w-100 btn btn-primary btn-lg" type="submit"
+                        th:text="#{button.save}">세이브</button>
+            </div>
+            <div class="col">
+                <button class="w-100 btn btn-secondary btn-lg"
+                        onclick="location.href='item.html'"
+                        th:onclick="|location.href='@{/items/{itemId}(itemId=${item.id})}'|" type="button"
+                        th:text="#{button.cancel}">취소</button>
+            </div>
+        </div>
+    </form>
+</div> <!-- /container -->
+</body>
+</html>

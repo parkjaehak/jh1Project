@@ -1,4 +1,4 @@
-package Jh1.project1.exception;
+package Jh1.project1.handler;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

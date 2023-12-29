@@ -21,6 +21,10 @@ public class Item {
     private ItemType itemType; //종류
     private String deliveryCode; //배송방식
 
+    private UploadFile attachFile; // 첨부파일 하나
+    private List<UploadFile> imageFiles; // 이미지파일 여러개
+    private String itemBrand;
+
     public Item() {
     }
 

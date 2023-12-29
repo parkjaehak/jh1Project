@@ -1,0 +1,34 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <link href="../css/bootstrap.min.css"
+          th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+    <style>
+        .container {
+            max-width: 560px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="py-5 text-center">
+        <h2>상품 조회</h2>
+    </div>
+
+    상표: <span th:text="${item.itemBrand}">카테고리</span><br/>
+    첨부파일: <a th:if="${item.attachFile}" th:href="|/items/attach/${item.id}|" th:text="${item.getAttachFile().getUploadFileName()}"/><br/>
+    <img th:each="imageFile : ${item.imageFiles}" th:src="|/items/images/${imageFile.getStoreFileName()}|" width="300" height="300"/>
+
+
+    <div class="row">
+        <div class="col">
+            <button class="w-100 btn btn-secondary btn-lg"
+                    onclick="location.href='item.html'"
+                    th:onclick="|location.href='@{/items/{itemId}(itemId=${item.id})}'|" type="button"
+                    th:text="#{button.check}">상품 상세로</button>
+        </div>
+    </div>
+</div> <!-- /container -->
+</body>
+</html>

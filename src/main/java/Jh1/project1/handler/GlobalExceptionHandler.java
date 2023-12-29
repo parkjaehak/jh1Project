@@ -1,4 +1,4 @@
-package Jh1.project1.controller;
+package Jh1.project1.handler;
 
 import Jh1.project1.dto.error.ErrorDto;
 import Jh1.project1.exception.UserException;
@@ -13,7 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Slf4j
 @RestControllerAdvice
-public class ExceptionControllerAdvice {
+public class GlobalExceptionHandler {
 
     /**
      * @ExceptionHandler 예외 처리 방법

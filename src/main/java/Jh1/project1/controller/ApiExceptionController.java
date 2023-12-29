@@ -47,8 +47,14 @@ public class ApiExceptionController {
         return new MemberDto(id, "hello " + id);
     }
 
+
+
+
+
     /**--------------------------------------------------------
      *에러 페이지 코드 : application/json
+     * (내가 직접 만든 ExceptionCustomizer(=BasicErrorController)를 사용할때만 사용
+     * 스프링이 BasicErrorController를 통해 알아서 실행시켜줌
      */
     @RequestMapping(value = "/error-page/500", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Map<String, Object>> errorPage500Api(HttpServletRequest request) {

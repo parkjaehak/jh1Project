@@ -1,5 +1,6 @@
-package Jh1.project1.exception;
+package Jh1.project1.handler;
 
+import Jh1.project1.exception.UserException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.http.HttpServletRequest;

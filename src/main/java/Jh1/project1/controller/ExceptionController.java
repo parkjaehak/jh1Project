@@ -53,8 +53,13 @@ public class ExceptionController {
 
 
 
+
+
+
+
     /**--------------------------------------------------------
      *에러 페이지 코드
+     * (내가 직접 만든 ExceptionCustomizer(=BasicErrorController)를 사용할때만 사용
      */
     @RequestMapping("/error-page/404")
     public String errorPage404(HttpServletRequest request, HttpServletResponse response) {
