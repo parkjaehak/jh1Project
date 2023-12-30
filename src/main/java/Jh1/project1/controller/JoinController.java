@@ -41,7 +41,7 @@ public class JoinController {
         member.setLoginId(joinDto.getLoginId());
         member.setPassword(joinDto.getPassword());
 
-        Member savedMember = memberRepository.save(member);
+        memberRepository.save(member);
 
 
         return "redirect:/";

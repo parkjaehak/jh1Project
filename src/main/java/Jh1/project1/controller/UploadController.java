@@ -17,7 +17,7 @@ import java.io.IOException;
  * 상품 업로드만 하는 controller -> 상품 업로드 및 저장은 ItemController에서
  */
 @Slf4j
-@Controller
+//@Controller
 @RequestMapping("/upload")
 public class UploadController {
 

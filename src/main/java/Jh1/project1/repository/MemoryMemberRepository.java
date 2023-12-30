@@ -1,13 +1,12 @@
 package Jh1.project1.repository;
 
 import Jh1.project1.domain.Member;
-import org.springframework.stereotype.Repository;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-@Repository
-public class MemoryMemberRepository implements MemberRepository {
+//@Repository
+public class MemoryMemberRepository extends AbstractMemberRepository {
 
     private static Map<Long, Member> memory = new ConcurrentHashMap<>();
     private static long sequence = 0L;
