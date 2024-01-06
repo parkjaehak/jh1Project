@@ -18,7 +18,15 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.HashMap;
 import java.util.Map;
 
-
+/**
+ * Exception Resolver를 사용해 WAS까지 전달할 필요없이 예외를 dispatcher servlet에 위임하는 이유
+ *
+ * """
+ * 예외가 발생해서 서블릿을 넘어 WAS까지 예외가 전달되면 HTTP 상태코드가 500으로 처리된다.
+ * 발생하는 예외에 따라서 400, 404 등등 다른 상태코드로 처리하고 싶다.
+ * 오류 메시지, 형식등을 API마다 다르게 처리하고 싶다.
+ * """
+ */
 @Slf4j
 @RestController
 public class ApiExceptionController {

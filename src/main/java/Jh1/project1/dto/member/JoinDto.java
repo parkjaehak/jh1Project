@@ -12,6 +12,7 @@ public class JoinDto {
     private String name;
 
     @NotEmpty
+    // 똑같은 Id일 경우 다시 Id만들도록
     private String loginId;
 
     @NotEmpty

@@ -4,6 +4,7 @@ import Jh1.project1.dto.error.ErrorDto;
 import Jh1.project1.exception.UserException;
 import Jh1.project1.exception.ViewException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.web.servlet.error.BasicErrorController;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -24,6 +25,7 @@ public class GlobalExceptionHandler {
      * 2. `@ExceptionHandler에 예외를 생략할 수 있다. 생략하면 메서드 파라미터의 예외가 지정된다.
      *
      */
+    //========================= Api 오류 전달 =================================
     // HTTP 컨버터가 사용되고, 응답이 JSON으로 반환
     // @ResponseStatus는 애노테이션이므로 HTTP 응답 코드를 동적으로 변경불가
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -49,8 +51,8 @@ public class GlobalExceptionHandler {
         return new ErrorDto("EX", "내부 오류");
     }
 
-    // HTML 오류 화면 응답
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    // ----------------------------HTML 오류 화면 응답-------------------------------
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(ViewException.class)
     public ModelAndView ex(ViewException e) {
         log.info("view exception e", e);

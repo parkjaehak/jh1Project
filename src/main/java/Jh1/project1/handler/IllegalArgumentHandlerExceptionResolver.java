@@ -9,7 +9,7 @@ import org.springframework.web.servlet.ModelAndView;
 import java.io.IOException;
 
 /**
- * Exception`을 Resolve(해결)하는 것이 목적 --------- ex) Exception을 sendError로 변환 후
+ * Exception을 Resolve(해결)하는 것이 목적 --------- ex) Exception을 sendError로 변환 후
  *
  * 1. 수동 등록 : ExceptionCustomizer에서 등록
  * 2. 자동 등록 : spring boot가 ErrorPage를 등록

@@ -17,7 +17,11 @@ public abstract class AbstractMemberRepository implements MemberRepository {
     }
 
     @Override
-    public Optional<Member> findByLoginId(String loginId) {
+    public Member findByLoginIdH2(String loginId) {
+        return null;
+    }
+    @Override
+    public Optional<Member> findByLoginIdMemory(String loginId) {
         return Optional.empty();
     }
 

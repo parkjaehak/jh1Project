@@ -1,6 +1,7 @@
 package Jh1.project1.repository;
 
 import Jh1.project1.domain.Member;
+import org.springframework.stereotype.Repository;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -25,7 +26,7 @@ public class MemoryMemberRepository extends AbstractMemberRepository {
     }
 
     @Override
-    public Optional<Member> findByLoginId(String loginId) {
+    public Optional<Member> findByLoginIdMemory(String loginId) {
         return findAll().stream()
                 .filter(m -> m.getLoginId().equals(loginId))
                 .findFirst();

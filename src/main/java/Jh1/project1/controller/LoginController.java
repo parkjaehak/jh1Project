@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class LoginController {
 
     private final LoginService loginService;
-    private final SessionUtil sessionManager;
+    private final SessionUtil sessionManager; // 직접 만든 Session manager
 
     @GetMapping("/login")
     public String loginForm(@ModelAttribute("member") Member member) {
@@ -41,11 +41,16 @@ public class LoginController {
         }
         Member loginMember = loginService.login(loginDto.getLoginId(), loginDto.getPassword());
 
+        // memory 에서 null 올라올 경우
         if (loginMember == null) {
             bindingResult.reject("loginFail", "아이디 또는 비밀번호가 맞지 않습니다.");
             log.info("errors={}", bindingResult);
             return "member/loginForm";
         }
+        // h2 db에서 exception올라올 경우
+     /*   try {
+
+        }catch ()*/
 
         //세션이 있으면 있는 세션 반환, 없으면 세션 생성
         HttpSession session = request.getSession(true);

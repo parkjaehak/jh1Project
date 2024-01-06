@@ -14,7 +14,9 @@ public interface MemberRepository {
     Member findById(Long id);
 
     //로그인 ID로 찾기
-    Optional<Member> findByLoginId(String loginId);
+    Member findByLoginIdH2(String loginId); //H2 db일때 사용
+
+    Optional<Member> findByLoginIdMemory(String loginId); // memory 일때 사용
 
     void update(String loginId, int money);
 

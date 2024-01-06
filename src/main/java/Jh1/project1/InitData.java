@@ -21,10 +21,10 @@ public class InitData {
         itemRepository.save(new Item("Batman", 10000, 10));
         itemRepository.save(new Item("Joker", 20000, 20));
 
-        Member member = new Member();
+      /*  Member member = new Member();
         member.setLoginId("atom8426");
         member.setPassword("0000");
         member.setName("jaehak");
-        memberRepository.save(member);
+        memberRepository.save(member);*/
     }
 }

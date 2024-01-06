@@ -1,6 +1,5 @@
 package Jh1.project1.connection;
 
-import Jh1.project1.repository.H2MemberRepository;
 import Jh1.project1.repository.MemberRepository;
 import com.zaxxer.hikari.HikariDataSource;
 import lombok.extern.slf4j.Slf4j;

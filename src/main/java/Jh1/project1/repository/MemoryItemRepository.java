@@ -45,6 +45,11 @@ public class MemoryItemRepository implements ItemRepository {
     }
 
     @Override
+    public void delete(Long itemId) {
+        memory.remove(itemId);
+    }
+
+    @Override
     public void clearStore() {
         memory.clear();
     }

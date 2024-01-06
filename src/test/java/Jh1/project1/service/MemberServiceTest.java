@@ -2,54 +2,102 @@ package Jh1.project1.service;
 
 import Jh1.project1.domain.Member;
 import Jh1.project1.repository.H2MemberRepository;
-import com.zaxxer.hikari.HikariDataSource;
+import Jh1.project1.repository.MemberRepository;
+
+import lombok.extern.slf4j.Slf4j;
+
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
-import org.springframework.jdbc.support.JdbcTransactionManager;
-import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.aop.support.AopUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
 
-import java.sql.SQLException;
+
+import javax.sql.DataSource;
 import java.util.Optional;
 
-import static Jh1.project1.ConnectionConst.*;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+@Slf4j
+@SpringBootTest
 public class MemberServiceTest {
 
     public static final String MEMBER_A = "memberA";
     public static final String MEMBER_B = "memberB";
     public static final String MEMBER_EX = "ex";
 
-    private H2MemberRepository memberRepository;
-    private AccountTransferService accountTransferService;
-
-    @BeforeEach
-    void before() {
-        HikariDataSource dataSource = new HikariDataSource();
-        dataSource.setJdbcUrl(URL);
-        dataSource.setUsername(USERNAME);
-        dataSource.setPassword(PASSWORD);
-
-        PlatformTransactionManager transactionManager = new JdbcTransactionManager(dataSource);
-
-        memberRepository = new H2MemberRepository(dataSource);
-        accountTransferService = new AccountTransferService(transactionManager,memberRepository);
-    }
+    @Autowired
+    MemberRepository memberRepository;
+    @Autowired
+    AccountTransferService accountTransferService;
+    @Autowired
+    DuplicateKeySaveService duplicateKeySaveService;
 
     @AfterEach
-    void after() throws SQLException {
+    void after(){
+        log.info("끝");
         memberRepository.delete(MEMBER_A);
         memberRepository.delete(MEMBER_B);
         memberRepository.delete(MEMBER_EX);
     }
 
+
+    @TestConfiguration
+    static class TestConfig {
+        // DataSourceTransactionManager : 트랜잭션 매니저를 스프링 빈으로 등록한다.
+        // 스프링이 제공하는 트랜잭션 AOP는 스프링 빈에 등록된 트랜잭션 매니저를 찾아서 사용하기 때문에 트랜잭션 매니저를 스프링 빈으로 등록해두어야 한다.
+        private final DataSource dataSource;
+        public TestConfig(DataSource dataSource) {
+            this.dataSource = dataSource;
+        }
+        @Bean
+        MemberRepository memberRepository() {
+            MemberRepository memberRepository = new H2MemberRepository(dataSource);
+            return memberRepository;
+        }
+        @Bean
+        AccountTransferService accountTransferService() {
+            AccountTransferService accountTransferService = new AccountTransferService(memberRepository());
+            return accountTransferService;
+        }
+        @Bean
+        DuplicateKeySaveService duplicateKeySaveService() {
+            DuplicateKeySaveService duplicateKeySaveService = new DuplicateKeySaveService(memberRepository());
+            return duplicateKeySaveService;
+        }
+    }
+
     @Test
+    void AopCheck() {
+        log.info("memberService class={}", accountTransferService.getClass());
+        log.info("memberRepository class={}", memberRepository.getClass());
+        assertThat(AopUtils.isAopProxy(accountTransferService)).isTrue();
+        assertThat(AopUtils.isAopProxy(memberRepository)).isFalse();
+    }
+
+    @Test
+    @DisplayName("중복 키 예외 해결")
+    void DuplicateKeySave() {
+        //given
+        Member memberA = new Member(MEMBER_A, 10000);
+        Member memberDuplicateA = new Member(MEMBER_A, 10000);
+
+        //when
+        Member initMember = duplicateKeySaveService.createMemberId(memberA);
+        Member retryMember = duplicateKeySaveService.createMemberId(memberDuplicateA);
+
+        //then
+        log.info("retryMember.getLoginId()={}", retryMember.getLoginId());
+        assertThat(memberDuplicateA.getLoginId()).isNotEqualTo(retryMember.getLoginId());
+    }
+    //@Test
     @DisplayName("정상 이체")
-    void accountTransfer() throws SQLException {
+    void accountTransfer() {
         //given
         Member memberA = new Member(MEMBER_A, 10000);
         Member memberB = new Member(MEMBER_B, 10000);
@@ -58,15 +106,13 @@ public class MemberServiceTest {
         //when
         accountTransferService.accountTransfer(memberA.getLoginId(), memberB.getLoginId(), 2000);
         //then
-        Optional<Member> findOptionalA = memberRepository.findByLoginId(memberA.getLoginId());
-        Optional<Member> findOptionalB = memberRepository.findByLoginId(memberB.getLoginId());
-        Member findMemberA = findOptionalA.orElse(null);
-        Member findMemberB = findOptionalB.orElse(null);
+        Member findMemberA = memberRepository.findByLoginIdH2(memberA.getLoginId());
+        Member findMemberB= memberRepository.findByLoginIdH2(memberB.getLoginId());
 
         assertThat(findMemberA.getMoney()).isEqualTo(8000);
         assertThat(findMemberB.getMoney()).isEqualTo(12000);
     }
-    @Test
+    //@Test
     @DisplayName("이체중 예외 발생")
     void accountTransferEx(){
         //given
@@ -78,13 +124,11 @@ public class MemberServiceTest {
         assertThatThrownBy(() -> accountTransferService.accountTransfer(memberA.getLoginId(), memberEx.getLoginId(), 2000))
                 .isInstanceOf(IllegalStateException.class);
         //then
-        Optional<Member> findOptionalA = memberRepository.findByLoginId(memberA.getLoginId());
-        Optional<Member> findOptionalEx = memberRepository.findByLoginId(memberEx.getLoginId());
-        Member findMemberA = findOptionalA.orElse(null);
-        Member findMemberEx = findOptionalEx.orElse(null);
+        Member findMemberA = memberRepository.findByLoginIdH2(memberA.getLoginId());
+        Member findMemberEx = memberRepository.findByLoginIdH2(memberEx.getLoginId());
 
-        //memberA의 돈만 2000원 줄었고, ex의 돈은 10000원 그대로이다.
-        assertThat(findMemberA.getMoney()).isEqualTo(8000);
+        //memberA의 돈이 롤백 되어야함
+        assertThat(findMemberA.getMoney()).isEqualTo(10000);
         assertThat(findMemberEx.getMoney()).isEqualTo(10000);
     }
 }

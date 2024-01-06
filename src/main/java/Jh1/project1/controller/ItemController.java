@@ -132,6 +132,12 @@ public class ItemController {
         return "redirect:/items/{itemId}";
     }
 
+    @GetMapping("/{itemId}/delete")
+    public String delete(@PathVariable Long itemId) {
+        itemRepository.delete(itemId);
+        return "redirect:/items";
+    }
+
     @GetMapping("/{itemId}/upload")
     public String uploadForm(@PathVariable Long itemId, Model model) {
         Item findItem = itemRepository.findById(itemId);
