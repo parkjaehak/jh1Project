@@ -4,9 +4,9 @@ import Jh1.project1.domain.DeliveryCode;
 import Jh1.project1.domain.Item;
 import Jh1.project1.domain.ItemType;
 import Jh1.project1.domain.UploadFile;
-import Jh1.project1.dto.item.SaveDto;
-import Jh1.project1.dto.item.UpdateDto;
-import Jh1.project1.dto.item.UploadDto;
+import Jh1.project1.dto.item.ItemSaveDto;
+import Jh1.project1.dto.item.ItemUpdateDto;
+import Jh1.project1.dto.item.ItemUploadDto;
 import Jh1.project1.repository.ItemRepository;
 import Jh1.project1.service.StoreFileService;
 import lombok.RequiredArgsConstructor;
@@ -61,11 +61,11 @@ public class ItemController {
     }
 
     @PostMapping("/add")
-    public String add(@Validated @ModelAttribute("item") SaveDto saveDto, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+    public String add(@Validated @ModelAttribute("item") ItemSaveDto itemSaveDto, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
 
         //특정 필드 예외가 아닌 전체 예외
-        if (saveDto.getPrice() != null && saveDto.getQuantity() != null) {
-            int resultPrice = saveDto.getPrice() * saveDto.getQuantity();
+        if (itemSaveDto.getPrice() != null && itemSaveDto.getQuantity() != null) {
+            int resultPrice = itemSaveDto.getPrice() * itemSaveDto.getQuantity();
             if (resultPrice < 10000) {
                 bindingResult.reject("totalPriceMin", new Object[]{10000, resultPrice}, null);
             }
@@ -78,17 +78,17 @@ public class ItemController {
 
         //Form(dto)데이터 기반 Item 객체 변환과정
         Item item = new Item();
-        item.setItemName(saveDto.getItemName());
-        item.setPrice(saveDto.getPrice());
-        item.setQuantity(saveDto.getQuantity());
-        item.setOpen(saveDto.getOpen());
-        item.setRegions(saveDto.getRegions());
-        item.setItemType(saveDto.getItemType());
-        item.setDeliveryCode(saveDto.getDeliveryCode());
+        item.setItemName(itemSaveDto.getItemName());
+        item.setPrice(itemSaveDto.getPrice());
+        item.setQuantity(itemSaveDto.getQuantity());
+        item.setOpen(itemSaveDto.getOpen());
+        item.setRegions(itemSaveDto.getRegions());
+        item.setItemType(itemSaveDto.getItemType());
+        item.setDeliveryCode(itemSaveDto.getDeliveryCode());
 
-        log.info("saveDto.getRegions() = {}", saveDto.getRegions());
-        log.info("saveDto.getItemType() = {}", saveDto.getItemType());
-        log.info("saveDto.getDeliveryCode() = {}", saveDto.getDeliveryCode());
+        log.info("itemSaveDto.getRegions() = {}", itemSaveDto.getRegions());
+        log.info("itemSaveDto.getItemType() = {}", itemSaveDto.getItemType());
+        log.info("itemSaveDto.getDeliveryCode() = {}", itemSaveDto.getDeliveryCode());
 
         Item savedItem = itemRepository.save(item);
         redirectAttributes.addAttribute("itemId", savedItem.getId());
@@ -104,11 +104,11 @@ public class ItemController {
     }
 
     @PostMapping("/{itemId}/edit")
-    public String edit(@PathVariable Long itemId, @Validated @ModelAttribute("item") UpdateDto updateDto, BindingResult bindingResult) {
+    public String edit(@PathVariable Long itemId, @Validated @ModelAttribute("item") ItemUpdateDto itemUpdateDto, BindingResult bindingResult) {
 
         //특정 필드 예외가 아닌 전체 예외
-        if (updateDto.getPrice() != null && updateDto.getQuantity() != null) {
-            int resultPrice = updateDto.getPrice() * updateDto.getQuantity();
+        if (itemUpdateDto.getPrice() != null && itemUpdateDto.getQuantity() != null) {
+            int resultPrice = itemUpdateDto.getPrice() * itemUpdateDto.getQuantity();
             if (resultPrice < 10000) {
                 bindingResult.reject("totalPriceMin", new Object[]{10000, resultPrice}, null);
             }
@@ -119,13 +119,13 @@ public class ItemController {
         }
 
         Item updateItem = new Item();
-        updateItem.setItemName(updateDto.getItemName());
-        updateItem.setPrice(updateDto.getPrice());
-        updateItem.setQuantity(updateDto.getQuantity());
-        updateItem.setOpen(updateDto.getOpen());
-        updateItem.setRegions(updateDto.getRegions());
-        updateItem.setItemType(updateDto.getItemType());
-        updateItem.setDeliveryCode(updateDto.getDeliveryCode());
+        updateItem.setItemName(itemUpdateDto.getItemName());
+        updateItem.setPrice(itemUpdateDto.getPrice());
+        updateItem.setQuantity(itemUpdateDto.getQuantity());
+        updateItem.setOpen(itemUpdateDto.getOpen());
+        updateItem.setRegions(itemUpdateDto.getRegions());
+        updateItem.setItemType(itemUpdateDto.getItemType());
+        updateItem.setDeliveryCode(itemUpdateDto.getDeliveryCode());
 
         itemRepository.update(itemId, updateItem);
 
@@ -147,15 +147,15 @@ public class ItemController {
     }
 
     @PostMapping("/{itemId}/upload")
-    public String upload(@PathVariable Long itemId, @ModelAttribute UploadDto uploadDto, RedirectAttributes redirectAttributes, Model model) throws IOException {
+    public String upload(@PathVariable Long itemId, @ModelAttribute ItemUploadDto itemUploadDto, RedirectAttributes redirectAttributes, Model model) throws IOException {
 
         Item findItem = itemRepository.findById(itemId);
 
-        UploadFile attachFile = storeFileService.storeFile(uploadDto.getAttachFile());
-        List<UploadFile> ImageFiles = storeFileService.storeFiles(uploadDto.getImageFiles());
+        UploadFile attachFile = storeFileService.storeFile(itemUploadDto.getAttachFile());
+        List<UploadFile> ImageFiles = storeFileService.storeFiles(itemUploadDto.getImageFiles());
 
         //데이터베이스에 저장
-        findItem.setItemBrand(uploadDto.getItemBrand());
+        findItem.setItemBrand(itemUploadDto.getItemBrand());
         findItem.setAttachFile(attachFile);
         findItem.setImageFiles(ImageFiles);
         //itemRepository.save(findItem);

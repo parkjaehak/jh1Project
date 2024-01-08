@@ -1,0 +1,31 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <link th:href="@{/css/bootstrap.min.css}" href="css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+<div class="container" style="max-width: 600px">
+    <div class="py-5 text-center">
+        <h2>당신의 아이디</h2>
+    </div>
+
+    <div>
+        <label for="loginId">너의 아이디</label>
+        <input type="text" id="loginId" th:field="${retryMember.loginId}" class="form-control" readonly>
+    </div>
+
+    <div class="row mt-4"> <!-- 조금 더 여백을 주기 위해 mt-4 추가 -->
+        <div class="col">
+            <!-- btn-secondary 대신 btn-info 클래스 사용하고, btn-lg 대신 btn-md 사용 -->
+            <button class="w-100 btn btn-info btn-md" type="button" th:onclick="|location.href='@{/}'|">확인</button>
+        </div>
+    </div>
+
+    <hr class="my-4">
+
+</div> <!-- /container -->
+</body>
+
+</html>

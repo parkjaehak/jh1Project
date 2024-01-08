@@ -22,10 +22,11 @@
     </div>
 
     <!-- Delete button container -->
+    <!-- 타임리프 문법 인식 문제 : 사용하는데에는 지장 없음 -->
     <div class="delete-button-container">
         <button class="btn btn-danger"
                 onclick="confirmDelete()"
-                th:onclick="|location.href='@{/items/{itemId}/delete(itemId=${item.id})}'|"
+                th:onclick="|if (confirm('정말로 삭제하시겠습니까?')){location.href='/items/${item.id}/delete'; }|"
                 type="button"
                 th:text="#{page.deleteItem}">삭제</button>
     </div>

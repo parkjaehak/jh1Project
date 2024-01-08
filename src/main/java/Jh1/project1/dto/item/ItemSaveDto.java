@@ -11,7 +11,7 @@ import org.hibernate.validator.constraints.Range;
 import java.util.List;
 
 @Data
-public class SaveDto {
+public class ItemSaveDto {
     @NotBlank
     private String itemName;
 

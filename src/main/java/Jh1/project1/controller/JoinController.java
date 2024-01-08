@@ -50,16 +50,12 @@ public class JoinController {
         // 키 중복 복구한 아이디인지 체크
         if (!(member.getLoginId().equals(createMember.getLoginId()))) {
             String retryLoginId = createMember.getLoginId(); //아이디가 중복일 경우 임의로 생성된 아이디를 고객이 알고 있어야함
-
+            log.info("retryLoginId={}",retryLoginId);
             model.addAttribute("retryMember", createMember);
-
-            return "retryView"; // 고객에게 retryLoginId를 보여주는 뷰
+            return "member/retryView"; // 고객에게 retryLoginId를 보여주는 뷰
         }
 
-
         //memberRepository.save(member);
-
-
         return "redirect:/";
     }
 }
